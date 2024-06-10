@@ -1,31 +1,51 @@
 import axios from 'axios';
 
-const USER_API_BASE_URL = 'http://localhost:5000/users'; // Corrected URL
+const USER_API_BASE_URL = 'http://localhost:5000/users';
 
 class UserService {
-  // get all methods related to user CRUD
+  login(admin) {
+    return axios.post('http://localhost:5000/login', admin);
+  }
+
+  signup(admin) {
+    return axios.post('http://localhost:5000/signup', admin);
+  }
 
   getUsers() {
-    return axios.get(USER_API_BASE_URL);
+    return axios.get(USER_API_BASE_URL, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
   }
 
   createUser(user) {
-    return axios.post(USER_API_BASE_URL, user);
+    return axios.post(USER_API_BASE_URL, user, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
+  }
+
+  changePassword(user) {
+    return axios.post('http://localhost:5000/change-password', user, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
   }
 
   getUserById(userId) {
-    return axios.get(`${USER_API_BASE_URL}/${userId}`);
+    return axios.get(`${USER_API_BASE_URL}/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
   }
 
   updateUser(userId, user) {
-    // Added user parameter
-    return axios.put(`${USER_API_BASE_URL}/${userId}`, user);
+    return axios.put(`${USER_API_BASE_URL}/${userId}`, user, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
   }
 
   deleteUser(userId) {
-    return axios.delete(`${USER_API_BASE_URL}/${userId}`);
+    return axios.delete(`${USER_API_BASE_URL}/${userId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    });
   }
 }
 
-// Export the class itself so that you can create an instance of it where needed
 export default new UserService();

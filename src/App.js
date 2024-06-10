@@ -10,8 +10,11 @@ import {
 import CreateUserComponent from './components/CreateUserComponent';
 import ListUserComponent from './components/ListUserComponent';
 import UpdateUserComponent from './components/UpdateUserComponent';
-
+import Login from './components/Login';
 import ViewUserComponent from './components/ViewUserComponent';
+import SignUp from './components/SignUp';
+import ChangePassword from './components/ChangePassword';
+
 function App() {
   return (
     <div className='App'>
@@ -21,8 +24,18 @@ function App() {
           <Switch>
             <Route path='/' exact component={ListUserComponent}></Route>
             <Route path='/users' exact component={ListUserComponent}></Route>
+            <Route path='/signup' exact component={SignUp}></Route>
+            <Route path='/login' exact component={Login}></Route>
+
+            <Route
+              path='/change-password'
+              exact
+              component={ChangePassword}
+            ></Route>
+
             <Route path='/add-user/:id' component={CreateUserComponent}></Route>
             <Route path='/view-user/:id' component={ViewUserComponent}></Route>
+
             <Route
               path='/update-user/:id'
               component={UpdateUserComponent}

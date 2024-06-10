@@ -1,44 +1,39 @@
 import React, { Component } from 'react';
 import UserService from '../services/UserService';
 
-class UpdateUserComponent extends Component {
+class SignUp extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      id: this.props.match.params.id,
       firstName: '',
       lastName: '',
       emailId: '',
+      password: '',
+      secretKey: '',
     };
 
     this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
     this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
     this.changeEmailHandler = this.changeEmailHandler.bind(this);
-    this.updateUser = this.updateUser.bind(this);
-    this.changePassword = this.changePassword.bind(this);
-    this.logout = this.logout.bind(this);
+    this.saveOrUpdateUser = this.saveOrUpdateUser.bind(this);
+    this.changePasswordHandler = this.changePasswordHandler.bind(this);
+    this.changeSecretKeyHandler = this.changeSecretKeyHandler.bind(this);
+
+    this.cancel = this.cancel.bind(this);
   }
 
-  componentDidMount() {
-    UserService.getUserById(this.state.id).then((res) => {
-      let user = res.data;
-      this.setState({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        emailId: user.emailId,
-      });
-    });
-  }
-
-  updateUser(e) {
+  saveOrUpdateUser(e) {
     e.preventDefault();
     let user = {
       firstName: this.state.firstName,
       lastName: this.state.lastName,
       emailId: this.state.emailId,
+      password: this.state.password,
+      SECRET_KEY: this.state.secretKey,
     };
-    UserService.updateUser(this.state.id, user).then((res) => {
-      this.props.history.push('/users');
+    UserService.signup(user).then((res) => {
+      this.props.history.push('/login');
     });
   }
 
@@ -49,36 +44,37 @@ class UpdateUserComponent extends Component {
   changeLastNameHandler(event) {
     this.setState({ lastName: event.target.value });
   }
+  changePasswordHandler(event) {
+    this.setState({ password: event.target.value });
+  }
 
   changeEmailHandler(event) {
     this.setState({ emailId: event.target.value });
   }
-
-  changePassword() {
-    this.props.history.push('/change-password');
-  }
-
-  logout() {
-    localStorage.removeItem('token');
-    this.props.history.push('/login');
+  changeSecretKeyHandler(event) {
+    this.setState({ secretKey: event.target.value });
   }
 
   cancel() {
-    this.props.history.push('/users');
+    this.props.history.push('/login');
+  }
+
+  getTitle() {
+    return <h3 className='text-center'>Sign Up</h3>;
   }
 
   render() {
     return (
       <div>
-        <br />
+        <br></br>
         <div className='container'>
           <div className='row'>
             <div className='card col-md-6 offset-md-3 offset-md-3'>
-              <h3 className='text-center'>Update User</h3>
+              {this.getTitle()}
               <div className='card-body'>
                 <form>
                   <div className='form-group'>
-                    <label>First Name:</label>
+                    <label>First Name: </label>
                     <input
                       placeholder='First Name'
                       name='firstName'
@@ -88,7 +84,7 @@ class UpdateUserComponent extends Component {
                     />
                   </div>
                   <div className='form-group'>
-                    <label>Last Name:</label>
+                    <label>Last Name: </label>
                     <input
                       placeholder='Last Name'
                       name='lastName'
@@ -98,7 +94,7 @@ class UpdateUserComponent extends Component {
                     />
                   </div>
                   <div className='form-group'>
-                    <label>Email Address:</label>
+                    <label>Email Id:</label>
                     <input
                       placeholder='Email Address'
                       name='emailId'
@@ -107,29 +103,41 @@ class UpdateUserComponent extends Component {
                       onChange={this.changeEmailHandler}
                     />
                   </div>
-                  <button className='btn btn-success' onClick={this.updateUser}>
+
+                  <div className='form-group'>
+                    <label>Password:</label>
+                    <input
+                      placeholder='Enter Password'
+                      name='password'
+                      type='password'
+                      className='form-control'
+                      value={this.state.password}
+                      onChange={this.changePasswordHandler}
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <label>Secret Key: </label>
+                    <input
+                      placeholder='Secret Key'
+                      name='secretKey'
+                      className='form-control'
+                      value={this.state.secretKey}
+                      onChange={this.changeSecretKeyHandler}
+                    />
+                  </div>
+
+                  <button
+                    className='btn btn-success'
+                    onClick={this.saveOrUpdateUser}
+                  >
                     Save
                   </button>
                   <button
                     className='btn btn-danger'
-                    onClick={this.cancel.bind(this)}
+                    onClick={this.cancel}
                     style={{ marginLeft: '10px' }}
                   >
-                    Cancel
-                  </button>
-                  <button
-                    className='btn btn-warning'
-                    onClick={this.changePassword}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Change Password
-                  </button>
-                  <button
-                    className='btn btn-secondary'
-                    onClick={this.logout}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Logout
+                    Already have an account? Login
                   </button>
                 </form>
               </div>
@@ -141,4 +149,4 @@ class UpdateUserComponent extends Component {
   }
 }
 
-export default UpdateUserComponent;
+export default SignUp;

@@ -14,12 +14,16 @@ class ListUserComponent extends Component {
   }
 
   componentDidMount() {
-    UserService.getUsers().then((res) => {
-      if (res.data == null) {
-        this.props.history.push('/add-user/_add');
-      }
-      this.setState({ users: res.data });
-    });
+    UserService.getUsers()
+      .then((res) => {
+        if (res.data == null) {
+          this.props.history.push('/add-user/_add');
+        }
+        this.setState({ users: res.data });
+      })
+      .catch((error) => {
+        this.props.history.push('/login');
+      });
   }
 
   deleteUser(id) {
